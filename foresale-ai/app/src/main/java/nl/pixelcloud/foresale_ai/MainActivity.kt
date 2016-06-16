@@ -10,8 +10,26 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
+import android.widget.EditText
+import com.google.gson.ExclusionStrategy
+import com.google.gson.FieldAttributes
+import com.google.gson.GsonBuilder
+
+import io.realm.Realm
+import io.realm.RealmObject
+import nl.pixelcloud.foresale_ai.domain.CreateGameRequest
+import nl.pixelcloud.foresale_ai.service.GameService
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -32,6 +50,54 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val navigationView = findViewById(R.id.nav_view) as NavigationView?
         navigationView!!.setNavigationItemSelectedListener(this)
+
+        val textView = findViewById(R.id.game_hash_text_view) as EditText?
+
+        // Attach the new game button.
+        val startGame = findViewById(R.id.create_game_button);
+        startGame!!.setOnClickListener { view -> createGame(view, textView) }
+    }
+
+    private fun createGame(view: View, textView: EditText?) {
+
+        val gson = GsonBuilder().setExclusionStrategies(object: ExclusionStrategy {
+            override fun shouldSkipField(f: FieldAttributes): Boolean {
+                return f.declaringClass == RealmObject::class.java
+            }
+
+            override fun shouldSkipClass(clazz: Class<*>): Boolean {
+                return false
+            }
+        }).create();
+
+
+        val interceptor: HttpLoggingInterceptor = HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+        val httpClient: OkHttpClient.Builder = OkHttpClient.Builder().addInterceptor(interceptor)
+
+        val retrofit: Retrofit = Retrofit.Builder()
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(httpClient.build())
+                .baseUrl("https://forsaleai.azurewebsites.net")
+                .build();
+
+
+        val request: CreateGameRequest = CreateGameRequest()
+
+        val realm = Realm.getDefaultInstance()
+
+        val gameService: GameService = retrofit.create(GameService::class.java)
+        gameService.createGame(request)
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe( { response ->
+                        Snackbar.make(view, "Your game has been created", Snackbar.LENGTH_LONG).setAction("Action", null).show()
+                        textView!!.setText(response.gameId)
+                    },
+                    { error -> Log.e("ERROR", error.toString())}
+                    )
+
     }
 
     override fun onBackPressed() {
