@@ -2,18 +2,18 @@ package nl.pixelcloud.foresale_ai.api.game.response
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
-import io.realm.annotations.RealmClass
+import nl.pixelcloud.foresale_ai.domain.Game
 
 /**
  * Created by Rob Peek on 17/06/16.
  */
-@RealmClass
-open class GameInfoResponse : RealmObject() {
+open class GameInfoResponse {
 
-    @PrimaryKey
-    @SerializedName("GameKey")
+    @SerializedName("Game")
     @Expose
-    open var gameKey: String? = null
+    open var game: Game? = null
+
+    @SerializedName("IsItMyTurn")
+    @Expose
+    open var isItMyTurn : Boolean = false
 }

@@ -9,6 +9,7 @@ import nl.pixelcloud.foresale_ai.service.GameEndpoint
 import rx.Scheduler
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
+import java.util.*
 
 /**
  * Created by Rob Peek on 17/06/16.
@@ -32,7 +33,7 @@ class GameRunner(ctx:Context) {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    response -> Log.d("GameRunner", response.toString())
+                    response -> Log.d("GameRunner", Arrays.toString(response.game?.completedHouseRounds))
                 })
     }
 }
