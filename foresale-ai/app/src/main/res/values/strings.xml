@@ -1,11 +1,17 @@
 <resources>
     <string name="app_name">Foresale-ai</string>
+    <string name="base_url">https://forsaleai.azurewebsites.net</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
-    <string name="action_new_game">Start a new game!</string>
-    <string name="start_game_info">Enter the hash for an existing game or create a new game.</string>
+    <string name="action_new_game">Create game</string>
     <string name="placeholder_game_hash">Enter a game hash</string>
+
+    <!-- MainActivity !-->
+    <string name="game_created">Your game has been created</string>
+    <string name="no_bots"># BOTS</string>
+    <string name="no_players"># PLAYERS</string>
+    <string name="xor">OR</string>
 </resources>

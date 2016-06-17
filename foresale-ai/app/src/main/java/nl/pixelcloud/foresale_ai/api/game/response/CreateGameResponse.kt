@@ -1,4 +1,4 @@
-package nl.pixelcloud.foresale_ai.domain
+package nl.pixelcloud.foresale_ai.api.game.response
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
