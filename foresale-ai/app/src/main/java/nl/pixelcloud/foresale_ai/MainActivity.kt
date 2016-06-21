@@ -11,8 +11,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.text.Editable
 import android.text.TextWatcher
-import android.transition.Visibility
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -24,13 +22,13 @@ import nl.pixelcloud.foresale_ai.api.Client
 import nl.pixelcloud.foresale_ai.api.game.request.CreateGameRequest
 import nl.pixelcloud.foresale_ai.game.GameRunner
 import nl.pixelcloud.foresale_ai.service.GameEndpoint
+import nl.pixelcloud.foresale_ai.util.*
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     var client: Client? = null
-    var playEnabled : Boolean = false
     var noPlayersPicker : NumberPicker? = null
     var noBotsPicker : NumberPicker? = null
     var rotateForward : Animation? = null
@@ -56,10 +54,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val navigationView = findViewById(R.id.nav_view) as NavigationView?
         navigationView!!.setNavigationItemSelectedListener(this)
-
-        rotateForward = AnimationUtils.loadAnimation(this, R.anim.rotate_forward);
-        rotateBackward = AnimationUtils.loadAnimation(this, R.anim.rotate_backwards);
-
 
         textView!!.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
@@ -109,7 +103,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .subscribe({ response ->
                     Snackbar.make(view, resources.getString(R.string.game_created), Snackbar.LENGTH_LONG).setAction("Action", null).show()
                     textView!!.setText(response.gameId)
-                }, { error -> Log.e("ERROR", error.toString()) })
+                }, { error -> logError(error.message!!) })
 
     }
 

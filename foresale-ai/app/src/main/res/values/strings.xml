@@ -14,4 +14,12 @@
     <string name="no_bots"># BOTS</string>
     <string name="no_players"># PLAYERS</string>
     <string name="xor">OR</string>
+
+    <!-- GameRunner !-->
+    <string name="join_game_failed">Unable to join game: %1$s!</string>
+    <string name="refresh_game_failed">Unable to refresh game: %1$s!</string>
+    <string name="game_completed">The game has finished!</string>
+    <string name="game_results">Here are the results</string>
+    <string name="game_result_row">[%1$d!]: %2$s! scored %3$d! points.</string>
+
 </resources>

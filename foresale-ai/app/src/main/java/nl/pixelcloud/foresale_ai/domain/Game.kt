@@ -2,15 +2,12 @@ package nl.pixelcloud.foresale_ai.domain
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
 
 /**
  * Created by Rob Peek on 17/06/16.
  */
 open class Game {
 
-    @PrimaryKey
     @SerializedName("Id")
     @Expose
     open var id: String = ""
@@ -19,9 +16,23 @@ open class Game {
     @Expose
     open var noPlayers : Int = 0
 
+    enum class GameState {
+        @SerializedName("0")
+        WAITING_FOR_PLAYERS,
+
+        @SerializedName("1")
+        HOUSE_CARDS,
+
+        @SerializedName("2")
+        CHEQUE_CARDS,
+
+        @SerializedName("3")
+        COMPLETED
+    }
+
     @SerializedName("StateOfGame")
     @Expose
-    open var stateOfGame : Int = 0
+    open var stateOfGame : GameState? = null
 
     @SerializedName("CanAddPlayer")
     @Expose
@@ -29,12 +40,17 @@ open class Game {
 
     @SerializedName("FinalRanking")
     @Expose
-    open var finalRanking : Int = 0
+    open var finalRanking : Array<Ranking> = arrayOf<Ranking>()
 
     @SerializedName("CompletedHouseRounds")
     @Expose
-    open var completedHouseRounds : Array<String> = arrayOf<String>()
+    open var completedHouseRounds : Array<Round> = arrayOf<Round>()
 
+    @SerializedName("CompletedCheckRounds")
+    @Expose
+    open var completedCheckRounds : Array<Round> = arrayOf<Round>()
 
-
+    @SerializedName("CurrentRound")
+    @Expose
+    open var round: Round? = null
 }

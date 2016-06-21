@@ -4,7 +4,6 @@ import android.util.Log
 import com.google.gson.ExclusionStrategy
 import com.google.gson.FieldAttributes
 import com.google.gson.GsonBuilder
-import io.realm.RealmObject
 import nl.pixelcloud.foresale_ai.service.GameEndpoint
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -22,15 +21,7 @@ class Client(baseUrl: String)  {
 
     init {
 
-        val gson = GsonBuilder().setExclusionStrategies(object: ExclusionStrategy {
-            override fun shouldSkipField(f: FieldAttributes): Boolean {
-                return f.declaringClass == RealmObject::class.java
-            }
-
-            override fun shouldSkipClass(clazz: Class<*>): Boolean {
-                return false
-            }
-        }).create();
+        val gson = GsonBuilder().create();
 
         val interceptor: HttpLoggingInterceptor = HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
