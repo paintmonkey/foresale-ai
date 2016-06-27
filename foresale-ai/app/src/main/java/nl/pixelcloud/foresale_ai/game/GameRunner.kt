@@ -2,6 +2,7 @@ package nl.pixelcloud.foresale_ai.game
 
 import android.content.Context
 import nl.pixelcloud.foresale_ai.R
+import nl.pixelcloud.foresale_ai.ai.MiniMaxBot
 import nl.pixelcloud.foresale_ai.ai.SimpleBot
 import nl.pixelcloud.foresale_ai.api.Client
 import nl.pixelcloud.foresale_ai.api.game.request.JoinGameRequest
@@ -28,13 +29,13 @@ class GameRunner(ctx: Context) {
     var client: Client? = null
     var endpoint: GameEndpoint? = null
     var myKey: String? = null
-    var bot: SimpleBot? = null
+    var bot: MiniMaxBot? = null
 
     init {
-        this.ctx = ctx;
+        this.ctx = ctx
         client = Client(ctx.resources.getString(R.string.base_url))
         endpoint = client!!.getGameEndpoint()
-        bot = SimpleBot(endpoint as GameEndpoint)
+        bot = MiniMaxBot(endpoint as GameEndpoint)
     }
 
     // Joins a game and start the play
@@ -90,7 +91,9 @@ class GameRunner(ctx: Context) {
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response -> refresh() },
-                           { error -> logError(String.format(ctx.resources.getString(R.string.refresh_game_failed), error.message))}
+                           { error -> logError(String.format(ctx.resources.getString(R.string.refresh_game_failed), error.message))
+                               System.out.print(error.printStackTrace())
+                           }
                 )
     }
 

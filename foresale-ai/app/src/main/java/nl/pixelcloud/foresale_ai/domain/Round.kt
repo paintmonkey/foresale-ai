@@ -20,7 +20,15 @@ open class Round {
     @Expose
     open var bids : Array<Bid> = arrayOf<Bid>()
 
+    enum class TypeOfRound {
+        @SerializedName("0")
+        BID_HOUSE,
+
+        @SerializedName("1")
+        BID_CHEQUE
+    }
+
     @SerializedName("TypeOfRound")
     @Expose
-    open var typeOfRound : Int? = null
+    open var typeOfRound : TypeOfRound? = null
 }

@@ -14,7 +14,7 @@ import java.util.*
 /**
  * Created by Rob Peek on 21/06/16.
  */
-class SimpleBot(endpoint: GameEndpoint) : ForeSaleBot {
+open class SimpleBot(endpoint: GameEndpoint) : ForeSaleBot {
 
     var endpoint: GameEndpoint? = null
 
@@ -22,9 +22,22 @@ class SimpleBot(endpoint: GameEndpoint) : ForeSaleBot {
         this.endpoint = endpoint;
     }
 
+    fun pass(info: GameInfoResponse) {
+        logInfo("${info.game!!.stateOfGame.toString()} :I pass")
+
+        var request: BidRequest = BidRequest()
+        request.playerKey = info.status?.key
+        request.amount = null
+
+        endpoint!!.bid(request)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response -> logInfo(response.toString()) }, { error -> logError(error.message!!) })
+    }
+
     fun bid(info: GameInfoResponse, amount: Int) {
 
-        var bid: Int? = amount
+        var bid: Int? = if(amount == -1) null else amount
         if(info.game!!.stateOfGame!!.equals(Game.GameState.HOUSE_CARDS) && amount > info.status!!.money){
             bid = null
         }

@@ -30,7 +30,7 @@ class Client(baseUrl: String)  {
         retrofit = Retrofit.Builder()
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .client(httpClient.build())
+                //.client(httpClient.build())
                 .baseUrl(baseUrl)
                 .build();
 

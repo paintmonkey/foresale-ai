@@ -17,7 +17,8 @@ class FSNumberPicker : NumberPicker {
     }
 
     fun processAttributeSet(attrs:AttributeSet) {
-        this.setMinValue(attrs.getAttributeIntValue(null, "min", 0));
-        this.setMaxValue(attrs.getAttributeIntValue(null, "max", 0));
+        this.minValue = attrs.getAttributeIntValue(null, "min", 0);
+        this.maxValue = attrs.getAttributeIntValue(null, "max", 0);
+        this.value = attrs.getAttributeIntValue(null, "default", 3);
     }
 }
